@@ -1,6 +1,6 @@
-// src/pages/ProfileForm.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./ProfileForm.css";
 
 const ProfileForm = () => {
   const [form, setForm] = useState({
@@ -23,15 +23,66 @@ const ProfileForm = () => {
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto">
-      <h2 className="text-xl font-bold mb-4">Your Fitness Profile</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input name="fitnessGoal" placeholder="Fitness Goal (e.g. lose weight)" onChange={handleChange} required />
-        <input name="diet" placeholder="Diet (e.g. vegan, keto)" onChange={handleChange} required />
-        <input name="calories" placeholder="Target Calories (e.g. 2200)" onChange={handleChange} required />
-        <input name="mealsPerDay" placeholder="Meals per Day (e.g. 3)" onChange={handleChange} required />
-        <button className="bg-blue-500 text-white p-2 rounded" type="submit">Generate Plan</button>
-      </form>
+    <div className="profile-form-root">
+      <div className="form-card">
+        <h2 className="form-title">Set Your Fitness Profile</h2>
+        <form onSubmit={handleSubmit} className="form-body">
+          <label>
+            Fitness Goal
+            <select name="fitnessGoal" value={form.fitnessGoal} onChange={handleChange} required>
+              <option value="">-- Select Goal --</option>
+              <option value="lose weight">Lose Weight</option>
+              <option value="gain muscle">Gain Muscle</option>
+              <option value="maintain">Maintain</option>
+            </select>
+          </label>
+
+          <label>
+            Diet Preference
+            <select name="diet" value={form.diet} onChange={handleChange} required>
+              <option value="">-- Select Diet --</option>
+              <option value="vegan">Vegan</option>
+              <option value="vegetarian">Vegetarian</option>
+              <option value="halal">Halal</option>
+              <option value="keto">Keto</option>
+              <option value="gluten-free">Gluten-Free</option>
+              <option value="no preference">No Preference</option>
+            </select>
+          </label>
+
+          <label>
+            Daily Calories
+            <input
+              name="calories"
+              type="number"
+              min="1000"
+              max="5000"
+              placeholder="e.g. 2200"
+              value={form.calories}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label>
+            Meals per Day
+            <input
+              name="mealsPerDay"
+              type="number"
+              min="1"
+              max="6"
+              placeholder="e.g. 3"
+              value={form.mealsPerDay}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <button type="submit" className="form-button">
+            Generate Meal Plan
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,15 +1,26 @@
-// src/components/Navbar.jsx
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import "./Navbar.css";
 
 const Navbar = () => (
-  <nav className="bg-gray-800 text-white px-4 py-2 flex justify-between">
-    <Link to="/" className="font-bold text-lg">NutriAI</Link>
-    <div className="space-x-4">
-      <Link to="/profile">Profile</Link>
-      <Link to="/meal-plan">Meal Plan</Link>
-    </div>
-  </nav>
+  <header className="navbar-header">
+    <nav className="navbar-container">
+      <NavLink to="/" className="navbar-logo">
+        <span className="logo-text">NutriAI</span>
+      </NavLink>
+      <div className="nav-links">
+        <NavLink to="/profile" className="nav-link">
+          Profile
+        </NavLink>
+        <NavLink to="/meal-plan" className="nav-link">
+          Meal Plan
+        </NavLink>
+        <NavLink to="/profile" className="cta-button">
+          Get Started
+        </NavLink>
+      </div>
+    </nav>
+  </header>
 );
 
 export default Navbar;

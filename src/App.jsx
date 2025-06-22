@@ -1,20 +1,20 @@
-// src/App.jsx
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import ProfileForm from "./pages/ProfileForm";
 import MealPlan from "./pages/MealPlan";
-import Navbar from "./components/Navbar";
+import "./App.css";
 
 const App = () => (
-  <Router>
+  <div className="app-container">
     <Navbar />
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/profile" element={<ProfileForm />} />
       <Route path="/meal-plan" element={<MealPlan />} />
     </Routes>
-  </Router>
+  </div>
 );
 
 export default App;
