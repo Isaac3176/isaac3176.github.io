@@ -27,3 +27,58 @@
   color: #f87171;
   font-weight: bold;
 }
+.mealplan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 24px;
+}
+
+.mealplan-card {
+  background: #23232a;
+  color: #f3f4f6;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.13);
+  padding: 24px 28px;
+  text-align: left;
+  transition: box-shadow 0.2s;
+  border: 1px solid #27272a;
+}
+
+.mealplan-card:hover {
+  box-shadow: 0 6px 24px rgba(37,99,235,0.13);
+}
+
+.mealplan-mealname {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #60a5fa;
+  margin-bottom: 10px;
+}
+
+.mealplan-macros {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+}
+
+.mealplan-macros strong {
+  color: #93c5fd;
+}
+
+.mealplan-ingredients {
+  margin-top: 8px;
+}
+
+.mealplan-ingredients ul {
+  margin: 6px 0 0 18px;
+  padding: 0;
+  color: #cbd5e1;
+  font-size: 1rem;
+}
+
+.mealplan-ingredients li {
+  margin-bottom: 2px;
+}

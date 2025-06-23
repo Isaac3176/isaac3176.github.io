@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "./Home.css";
 
 const features = [
@@ -51,9 +51,32 @@ const Home = () => (
         )
       )}
     </div>
-
-    <footer className="footer">Built with ❤️ using React & OpenAI</footer>
+    <h2 className="home-tagline">
+  Eat smart. Train hard. <span>FitPlate does the planning.</span>
+    </h2>
+    <div className="demo-preview">
+  <h3>Sample Meal Plan Preview</h3>
+  <div className="demo-card">
+    <strong>Breakfast:</strong> Greek Yogurt with Berries<br />
+    <strong>Lunch:</strong> Grilled Chicken Salad<br />
+    <strong>Dinner:</strong> Salmon, Quinoa & Veggies
   </div>
+</div>
+    <div className="cta-banner">
+    <span>Ready to transform your nutrition? Start your journey now!</span>
+    </div>
+    <div className="home-cta-container">
+      
+      <NavLink to="/profile" className="cta-button">
+        Get Started
+      </NavLink>
+    </div>
+    <div className="home-footer">
+      <p>© 2023 FitPlate. All rights reserved.</p>
+    <footer className="footer">Built with ❤️ using React & OpenAI</footer>
+    </div>
+  </div>
+  
 );
 
 export default Home;

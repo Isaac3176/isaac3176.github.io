@@ -1,5 +1,5 @@
 .home-root {
-  padding-top: 60px;
+  /* padding-top: 60px; */  /* Remove or comment out this line */
   padding-left: 24px;
   padding-right: 24px;
   min-height: 100vh;
@@ -105,8 +105,70 @@
 }
 
 /* ...existing code... */
+.home-cta-container {
+  display: flex;
+  justify-content: center;
+  margin: 48px 0 24px 0;
+}
 
+.cta-button {
+  background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+  color: #fff;
+  font-weight: bold;
+  padding: 12px 32px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+  border: none;
+  outline: none;
+}
+
+.cta-button:hover {
+  background: linear-gradient(90deg, #1e40af 60%, #60a5fa 100%);
+  box-shadow: 0 4px 16px rgba(37,99,235,0.18);
+}
+.cta-banner {
+  background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 18px 24px;
+  text-align: center;
+  margin: 48px auto 24px auto;
+  max-width: 500px;
+  font-size: 1.15rem;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.10);
+}
 /* Footer */
+.home-tagline {
+  font-size: 1.3rem;
+  color: #93c5fd;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+.home-tagline span {
+  color: #22c55e;
+}
+.demo-preview {
+  margin: 40px auto 0 auto;
+  max-width: 400px;
+  text-align: center;
+}
+.demo-preview h3 {
+  color: #60a5fa;
+  margin-bottom: 10px;
+}
+.demo-card {
+  background: #23232a;
+  color: #f3f4f6;
+  border-radius: 10px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+}
 .footer {
   margin-top: 60px;
   text-align: center;

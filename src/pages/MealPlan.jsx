@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./MealPlan.css"; // Optional styling
+import "./MealPlan.css";
 
 const assistantId = "asst_TJoiHnBJWseYgvrC7GYeaqY6"; // Replace with your assistant ID
 
@@ -16,7 +16,8 @@ const MealPlan = () => {
     "OpenAI-Beta": "assistants=v2",
   };
 
-  // Step 1: Create a thread
+  // Step 1: Create a thread from the openai API
+  // This code is where the conversation will take place
   const createThread = async () => {
     const res = await fetch("https://api.openai.com/v1/threads", {
       method: "POST",
@@ -49,7 +50,7 @@ const MealPlan = () => {
       throw new Error(errorText || "Failed to add message");
     }
     const data = await res.json();
-    return data.id; // message ID
+    return data.id; 
   };
 
   // Step 3: Start the assistant run
@@ -87,7 +88,8 @@ const MealPlan = () => {
       }
       const runData = await runRes.json();
       if (runData.status === "completed") {
-        // Get messages
+        // Get the messages from the thread
+        // This ode will return the last message from the assistant
         const messagesRes = await fetch(
           `https://api.openai.com/v1/threads/${threadId}/messages`,
           {
@@ -109,7 +111,6 @@ const MealPlan = () => {
           });
         return responses[responses.length - 1];
       }
-      // Wait before polling again
       await new Promise((r) => setTimeout(r, 1500));
     }
   };
@@ -169,37 +170,37 @@ Return the result in valid JSON format like:
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-4 text-center">
+    <div className="mealplan-root">
+      <h2 className="mealplan-title">
         🥗 Your AI-Generated Meal Plan
       </h2>
 
-      {loading && <p className="text-center">Loading your meal plan...</p>}
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {loading && <p className="mealplan-loading">Loading your meal plan...</p>}
+      {error && <p className="mealplan-error">{error}</p>}
 
       {mealPlan && mealPlan.length > 0 && (
-        <div className="space-y-6">
+        <div className="mealplan-list">
           {mealPlan.map((meal, index) => (
-            <div
-              key={index}
-              className="p-4 border rounded-lg shadow-sm bg-white"
-            >
-              <h3 className="text-xl font-semibold mb-2">{meal.name}</h3>
-              <p className="mb-1">
-                <strong>Calories:</strong> {meal.calories}
-              </p>
-              <p className="mb-1">
-                <strong>Macros:</strong> {meal.protein}g Protein, {meal.carbs}g
-                Carbs, {meal.fats}g Fats
-              </p>
-              <p className="mt-2">
+            <div key={index} className="mealplan-card">
+              <h3 className="mealplan-mealname">{meal.name}</h3>
+              <div className="mealplan-macros">
+                <span>
+                  <strong>Calories:</strong> {meal.calories}
+                </span>
+                <span>
+                  <strong>Protein:</strong> {meal.protein}g &nbsp;
+                  <strong>Carbs:</strong> {meal.carbs}g &nbsp;
+                  <strong>Fats:</strong> {meal.fats}g
+                </span>
+              </div>
+              <div className="mealplan-ingredients">
                 <strong>Ingredients:</strong>
-              </p>
-              <ul className="list-disc list-inside text-gray-700">
-                {meal.ingredients.map((ing, i) => (
-                  <li key={i}>{ing}</li>
-                ))}
-              </ul>
+                <ul>
+                  {meal.ingredients.map((ing, i) => (
+                    <li key={i}>{ing}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))}
         </div>

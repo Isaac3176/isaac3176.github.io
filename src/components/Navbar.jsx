@@ -6,18 +6,22 @@ const Navbar = () => (
   <header className="navbar-header">
     <nav className="navbar-container">
       <NavLink to="/" className="navbar-logo">
-        <span className="logo-text">NutriAI</span>
+        <span className="logo-text">FitPlate</span>
       </NavLink>
       <div className="nav-links">
-        <NavLink to="/profile" className="nav-link">
+        <NavLink
+          to="/profile"
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+        >
           Profile
         </NavLink>
-        <NavLink to="/meal-plan" className="nav-link">
+        <NavLink
+          to="/meal-plan"
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+        >
           Meal Plan
         </NavLink>
-        <NavLink to="/profile" className="cta-button">
-          Get Started
-        </NavLink>
+        
       </div>
     </nav>
   </header>
