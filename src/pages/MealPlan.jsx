@@ -9,7 +9,7 @@ const MealPlan = () => {
 
   // Backend API call
   const generateMealPlan = async (prompt) => {
-    const response = await fetch("http://localhost:5000/api/meal-plan", {
+    const response = await fetch("https://backend-42kv.onrender.com/api/meal-plan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt }),
