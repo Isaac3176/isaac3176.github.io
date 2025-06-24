@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "node-fetch": "^3.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.2"
@@ -44,5 +45,5 @@
   "bugs": {
     "url": "https://github.com/Isaac3176/Fitplate/issues"
   },
-  "homepage": "https://isaac3176.github.io/Fitplate"
+  "homepage": "."
 }
