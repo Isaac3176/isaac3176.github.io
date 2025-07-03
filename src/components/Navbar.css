@@ -100,3 +100,49 @@ html, body {
     padding: 7px 10px;
   }
 }
+/* Keep your existing styles above... */
+
+.hamburger {
+  display: none;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  cursor: pointer;
+  z-index: 110;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: rgba(24,24,27,0.97);
+    flex-direction: column;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+    z-index: 99;
+  }
+
+  .nav-links.open {
+    max-height: 300px;
+    padding-bottom: 1rem;
+  }
+
+  .nav-link {
+    padding: 14px 20px;
+    border-top: 1px solid #333;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-link::after {
+    left: 20px;
+  }
+}
