@@ -21,7 +21,25 @@ const Navbar = () => (
         >
           Meal Plan
         </NavLink>
-        
+        <NavLink
+          to="/grocery-sync"
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+        >
+          Grocery Sync
+        </NavLink>
+        <NavLink
+          to="/meal-schedule"
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+        >
+          Meal Schedule
+        </NavLink>
+        <NavLink
+          to="/track-macros"
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+        >
+          Track Macros
+        </NavLink>
+
       </div>
     </nav>
   </header>

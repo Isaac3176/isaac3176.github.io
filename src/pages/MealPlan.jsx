@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "./MealPlan.css";
+import { useNavigate } from "react-router-dom";
 
 const MealPlan = () => {
   const [mealPlan, setMealPlan] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [rawResponse, setRawResponse] = useState(""); // For debugging
+
+
+  const navigate = useNavigate();
+
+  const handleScheduleClick = (meal) => {
+    localStorage.setItem("selectedMealToSchedule", JSON.stringify(meal));
+    navigate("/meal-schedule");
+  };
 
   // Backend API call
   const generateMealPlan = async (prompt) => {
@@ -63,6 +72,8 @@ Return in format:
       try {
         const result = await generateMealPlan(prompt);
         setMealPlan(result.meals || []);
+        localStorage.setItem("userMealPlan", JSON.stringify(result));
+
       } catch (err) {
         setError(`❌ ${err.message}`);
       } finally {
@@ -99,6 +110,13 @@ Return in format:
                   ))}
                 </ul>
               </div>
+            <button
+              className="mealplan-schedule-btn"
+              onClick={() => handleScheduleClick(meal)}
+            >
+              📅 Add to Schedule
+            </button>
+
             </div>
           ))}
         </div>

@@ -14,14 +14,14 @@ const features = [
     link: "/meal-plan",
   },
   {
-    title: "Track Macros (Coming Soon)",
+    title: "Track Macros",
     image: "/macros.png",
-    link: null,
+    link: "/track-macros",
   },
   {
-    title: "Grocery Sync (Coming Soon)",
+    title: "Grocery Sync",
     image: "/grocery.jpg",
-    link: null,
+    link: "/grocery-sync",
   },
 ];
 

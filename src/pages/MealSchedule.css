@@ -1,0 +1,49 @@
+.schedule-root {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.schedule-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.schedule-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.schedule-table th,
+.schedule-table td {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  text-align: center;
+  vertical-align: top;
+}
+
+.add-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.add-btn:hover {
+  background-color: #45a049;
+}
+
+.assigned-meal p {
+  margin: 0;
+}
+
+.assigned-meal button {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 1rem;
+  cursor: pointer;
+}
