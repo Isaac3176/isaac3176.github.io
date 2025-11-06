@@ -8,8 +8,15 @@ const MealSchedulePage = () => {
   const [schedule, setSchedule] = useState({});
   const [selectedMeal, setSelectedMeal] = useState(null);
 
+  // Get user from localStorage
+  const user = JSON.parse(localStorage.getItem("userProfile"));
+  const scheduleKey = user?.email ? `userMealSchedule_${user.email}` : "userMealSchedule_guest";
+
   useEffect(() => {
-    const existingSchedule = JSON.parse(localStorage.getItem("userMealSchedule")) || {};
+    if (!user?.email) return;
+
+    // Load existing schedule or initialize
+    const existingSchedule = JSON.parse(localStorage.getItem(scheduleKey)) || {};
     const newSchedule = {};
     for (const day of days) {
       newSchedule[day] = existingSchedule[day] || {
@@ -20,13 +27,15 @@ const MealSchedulePage = () => {
     }
     setSchedule(newSchedule);
 
+    // Load any meal selected from MealPlan page
     const meal = localStorage.getItem("selectedMealToSchedule");
     if (meal) {
       setSelectedMeal(JSON.parse(meal));
       localStorage.removeItem("selectedMealToSchedule");
     }
-  }, []);
+  }, [scheduleKey, user]);
 
+  // Assign a meal to a day/time
   const handleAssign = (day, time) => {
     if (!selectedMeal) return alert("No meal selected from Meal Plan.");
 
@@ -39,11 +48,12 @@ const MealSchedulePage = () => {
     };
 
     setSchedule(updatedSchedule);
-    localStorage.setItem("userMealSchedule", JSON.stringify(updatedSchedule));
+    localStorage.setItem(scheduleKey, JSON.stringify(updatedSchedule));
     setSelectedMeal(null);
     alert(`Added "${selectedMeal.name}" to ${day} ${time}`);
   };
 
+  // Remove a meal from a day/time
   const handleRemove = (day, time) => {
     const updatedSchedule = {
       ...schedule,
@@ -54,12 +64,14 @@ const MealSchedulePage = () => {
     };
 
     setSchedule(updatedSchedule);
-    localStorage.setItem("userMealSchedule", JSON.stringify(updatedSchedule));
+    localStorage.setItem(scheduleKey, JSON.stringify(updatedSchedule));
   };
 
   return (
     <div className="schedule-root">
       <h2 className="schedule-title">📅 Weekly Meal Schedule</h2>
+      {user && <h4>Logged in as: {user.email}</h4>}
+
       <div className="schedule-table">
         <table>
           <thead>

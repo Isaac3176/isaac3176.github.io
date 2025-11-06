@@ -13,19 +13,24 @@ const TrackMacrosPage = () => {
     fats: "",
   });
 
-  // Load logs and user profile
+  // Load user profile
   useEffect(() => {
-    const storedLogs = JSON.parse(localStorage.getItem("macroLogs")) || {};
-    setLogs(storedLogs[date] || []);
-
     const profile = localStorage.getItem("userProfile");
     if (profile) setUser(JSON.parse(profile));
-  }, [date]);
+  }, []);
+
+  const logsKey = user?.email ? `macroLogs_${user.email}` : "macroLogs_guest";
+
+  // Load logs whenever user or date changes
+  useEffect(() => {
+    const storedLogs = JSON.parse(localStorage.getItem(logsKey)) || {};
+    setLogs(storedLogs[date] || []);
+  }, [date, logsKey]);
 
   const saveLogs = (updatedLogs) => {
-    const allLogs = JSON.parse(localStorage.getItem("macroLogs")) || {};
+    const allLogs = JSON.parse(localStorage.getItem(logsKey)) || {};
     allLogs[date] = updatedLogs;
-    localStorage.setItem("macroLogs", JSON.stringify(allLogs));
+    localStorage.setItem(logsKey, JSON.stringify(allLogs));
     setLogs(updatedLogs);
   };
 
@@ -63,11 +68,14 @@ const TrackMacrosPage = () => {
       <h2 className="track-title">📊 Track Macros - {date}</h2>
 
       {user && (
-        <div className="macro-summary">
-          <MacroBar label="Calories" current={total.calories} target={user.calories} />
-          <MacroBar label="Protein" current={total.protein} target={user.protein || 120} />
-          <MacroBar label="Carbs" current={total.carbs} target={user.carbs || 250} />
-          <MacroBar label="Fats" current={total.fats} target={user.fats || 80} />
+        <div>
+          <h4>Logged in as: {user.email}</h4>
+          <div className="macro-summary">
+            <MacroBar label="Calories" current={total.calories} target={user.calories} />
+            <MacroBar label="Protein" current={total.protein} target={user.protein || 120} />
+            <MacroBar label="Carbs" current={total.carbs} target={user.carbs || 250} />
+            <MacroBar label="Fats" current={total.fats} target={user.fats || 80} />
+          </div>
         </div>
       )}
 

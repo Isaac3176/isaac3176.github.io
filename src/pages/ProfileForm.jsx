@@ -4,6 +4,7 @@ import "./ProfileForm.css";
 
 const ProfileForm = () => {
   const [form, setForm] = useState({
+    email: "",
     fitnessGoal: "",
     diet: "",
     calories: "",
@@ -18,6 +19,13 @@ const ProfileForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Basic validation for email/username
+    if (!form.email.trim()) {
+      alert("Please enter your email or username.");
+      return;
+    }
+
     localStorage.setItem("userProfile", JSON.stringify(form));
     navigate("/meal-plan");
   };
@@ -27,6 +35,19 @@ const ProfileForm = () => {
       <div className="form-card">
         <h2 className="form-title">Set Your Fitness Profile</h2>
         <form onSubmit={handleSubmit} className="form-body">
+
+          <label>
+            Email / Username
+            <input
+              name="email"
+              type="text"
+              placeholder="Enter your email or username"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
           <label>
             Fitness Goal
             <select name="fitnessGoal" value={form.fitnessGoal} onChange={handleChange} required>

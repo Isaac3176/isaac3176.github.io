@@ -3,46 +3,53 @@ import "./MealPlan.css";
 import { useNavigate } from "react-router-dom";
 
 const MealPlan = () => {
-  const [mealPlan, setMealPlan] = useState(null);
+  const [mealPlan, setMealPlan] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [rawResponse, setRawResponse] = useState(""); // For debugging
 
-
   const navigate = useNavigate();
 
+  // Schedule button handler
   const handleScheduleClick = (meal) => {
     localStorage.setItem("selectedMealToSchedule", JSON.stringify(meal));
     navigate("/meal-schedule");
   };
 
-  // Backend API call
+  // Backend API call to generate a new meal plan
   const generateMealPlan = async (prompt) => {
+    const user = JSON.parse(localStorage.getItem("userProfile"));
+    if (!user?.email) throw new Error("User email not found");
+
     const response = await fetch("https://backend-42kv.onrender.com/api/meal-plan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
+      body: JSON.stringify({ prompt, userId: user.email }),
     });
 
     const text = await response.text();
-    
-    setRawResponse(text); // Save raw response for debugging
+    if (!response.ok) throw new Error(text || "Server error");
 
-    if (!response.ok) {
-      throw new Error(text || "Server error");
-    }
+    let data;
     try {
-      return JSON.parse(text);
+      data = JSON.parse(text);
     } catch (err) {
-      throw new Error("Invalid JSON from backend: " + text);
+      throw new Error("Invalid JSON returned from server");
     }
+
+    // Save locally per user
+    localStorage.setItem(`userMealPlan_${user.email}`, JSON.stringify(data));
+    setRawResponse(text); // optional debugging
+
+    return data;
   };
 
+  // Load meal plan on mount
   useEffect(() => {
-    const runMealPlan = async () => {
+    const loadMealPlan = async () => {
       setLoading(true);
       setError("");
-      setMealPlan(null);
+      setMealPlan([]);
       setRawResponse("");
 
       const userProfile = localStorage.getItem("userProfile");
@@ -53,7 +60,20 @@ const MealPlan = () => {
       }
 
       const user = JSON.parse(userProfile);
-      const prompt = `
+
+      try {
+        // 1️⃣ Fetch past meal plans from backend
+        const res = await fetch(`https://backend-42kv.onrender.com/api/meal-plan/${user.email}`);
+        if (!res.ok) throw new Error("Failed to fetch past meal plans");
+
+        const data = await res.json();
+
+        if (data.length > 0) {
+          // Use most recent saved plan
+          setMealPlan(data[0].meals || []);
+        } else {
+          // 2️⃣ If no saved plan, generate a new one
+          const prompt = `
 Respond ONLY with valid minified JSON. NO explanations, NO markdown, NO code block, NO title, ONLY pure JSON. Example:
 {"meals":[{"name":"...","ingredients":[],...}]}
 
@@ -67,28 +87,32 @@ Each meal should include:
 
 Return in format:
 {"meals":[{"name":"...","ingredients":["..."],"calories":0,"protein":0,"carbs":0,"fats":0}, ... ]}
-`;
+          `;
 
-      try {
-        const result = await generateMealPlan(prompt);
-        setMealPlan(result.meals || []);
-        localStorage.setItem("userMealPlan", JSON.stringify(result));
-
+          const result = await generateMealPlan(prompt);
+          setMealPlan(result.meals || []);
+        }
       } catch (err) {
+        console.error(err);
         setError(`❌ ${err.message}`);
       } finally {
         setLoading(false);
       }
     };
 
-    runMealPlan();
+    loadMealPlan();
   }, []);
+
+  const user = JSON.parse(localStorage.getItem("userProfile"));
 
   return (
     <div className="mealplan-root">
       <h2 className="mealplan-title">🥗 Your AI-Generated Meal Plan</h2>
+      {user && <h4>Logged in as: {user.email}</h4>}
+
       {loading && <p className="mealplan-loading">Loading your meal plan...</p>}
       {error && <p className="mealplan-error">{error}</p>}
+
       {mealPlan && mealPlan.length > 0 && (
         <div className="mealplan-list">
           {mealPlan.map((meal, index) => (
@@ -110,13 +134,12 @@ Return in format:
                   ))}
                 </ul>
               </div>
-            <button
-              className="mealplan-schedule-btn"
-              onClick={() => handleScheduleClick(meal)}
-            >
-              📅 Add to Schedule
-            </button>
-
+              <button
+                className="mealplan-schedule-btn"
+                onClick={() => handleScheduleClick(meal)}
+              >
+                📅 Add to Schedule
+              </button>
             </div>
           ))}
         </div>
