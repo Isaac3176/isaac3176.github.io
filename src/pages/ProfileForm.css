@@ -61,12 +61,12 @@
 .form-body input,
 .form-body select {
   padding: 12px 14px;
-  font-size: 1rem;
+  font-size: 1rem !important;
   margin-top: 8px;
   border-radius: 8px;
   border: 2px solid #e5e7eb;
-  background: #ffffff;
-  color: #111827;
+  background: #ffffff !important;
+  color: #111827 !important;
   transition: all 0.2s ease;
 }
 
