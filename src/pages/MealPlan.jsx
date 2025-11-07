@@ -38,7 +38,7 @@ const MealPlan = () => {
     }
 
     // Save locally per user
-    localStorage.setItem(`userMealPlan_${user.email}`, JSON.stringify(data));
+    
     setRawResponse(text); // optional debugging
 
     return data;
