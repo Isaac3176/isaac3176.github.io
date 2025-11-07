@@ -1,5 +1,5 @@
 .profile-form-root {
-  background: #18181b;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -8,20 +8,40 @@
 }
 
 .form-card {
-  background: #f9fafb;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  max-width: 520px;
   width: 100%;
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .form-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #111827;
-  margin-bottom: 24px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 8px;
   text-align: center;
+}
+
+/* Add subtitle */
+.form-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 32px;
 }
 
 .form-body {
@@ -33,37 +53,139 @@
 .form-body label {
   display: flex;
   flex-direction: column;
-  font-size: 0.95rem;
-  color: #1f2937;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
 }
 
 .form-body input,
 .form-body select {
-  padding: 10px;
+  padding: 12px 14px;
   font-size: 1rem;
-  margin-top: 6px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  background: #f9fafb;
+  transition: all 0.2s ease;
 }
 
 .form-body input:focus,
 .form-body select:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  border-color: #667eea;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-body input::placeholder {
+  color: #9ca3af;
+}
+
+/* Style select dropdown arrow */
+.form-body select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
 }
 
 .form-button {
-  background-color: #3b82f6;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 12px;
-  font-weight: bold;
+  padding: 14px;
+  font-size: 1.05rem;
+  font-weight: 600;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .form-button:hover {
-  background-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+}
+
+.form-button:active {
+  transform: translateY(0);
+}
+
+/* Add icon support for inputs */
+.input-group {
+  position: relative;
+}
+
+.input-group input {
+  padding-left: 40px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .form-card {
+    padding: 28px 24px;
+  }
+
+  .form-title {
+    font-size: 1.6rem;
+  }
+
+  .form-body {
+    gap: 16px;
+  }
+}
+
+/* Add validation error styles (optional) */
+.form-body input.error,
+.form-body select.error {
+  border-color: #ef4444;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+/* Loading state for button (optional) */
+.form-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-button.loading {
+  position: relative;
+  color: transparent;
+}
+
+.form-button.loading::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
