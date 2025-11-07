@@ -190,3 +190,6 @@
     transform: rotate(360deg);
   }
 }
+input, select, textarea {
+  color:black;
+}
