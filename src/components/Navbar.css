@@ -5,7 +5,6 @@ html, body {
   box-sizing: border-box;
 }
 
-
 .navbar-header {
   background: rgba(24,24,27,0.95);
   box-shadow: 0 2px 16px rgba(0,0,0,0.25);
@@ -23,6 +22,12 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 18px 36px;
+}
+
+.navbar-brand-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .navbar-logo {
@@ -48,9 +53,20 @@ html, body {
   color: #93c5fd;
 }
 
+.navbar-user-email {
+  font-size: 0.85rem;
+  color: #93c5fd;
+  background: rgba(147, 197, 253, 0.1);
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  font-weight: 500;
+  border: 1px solid rgba(147, 197, 253, 0.2);
+}
+
 .nav-links {
   display: flex;
   gap: 22px;
+  align-items: center;
 }
 
 .nav-link {
@@ -88,6 +104,34 @@ html, body {
   width: 60%;
 }
 
+.nav-logout-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.nav-logout-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.hamburger {
+  display: none;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  cursor: pointer;
+  z-index: 110;
+}
+
 @media (max-width: 600px) {
   .navbar-container {
     padding: 12px 10px;
@@ -100,19 +144,19 @@ html, body {
     padding: 7px 10px;
   }
 }
-/* Keep your existing styles above... */
-
-.hamburger {
-  display: none;
-  font-size: 1.8rem;
-  background: none;
-  border: none;
-  color: #e5e7eb;
-  cursor: pointer;
-  z-index: 110;
-}
 
 @media (max-width: 768px) {
+  .navbar-brand-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .navbar-user-email {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.7rem;
+  }
+
   .hamburger {
     display: block;
   }
@@ -128,10 +172,11 @@ html, body {
     overflow: hidden;
     transition: max-height 0.3s ease-in-out;
     z-index: 99;
+    align-items: stretch;
   }
 
   .nav-links.open {
-    max-height: 300px;
+    max-height: 400px;
     padding-bottom: 1rem;
   }
 
@@ -144,5 +189,11 @@ html, body {
 
   .nav-link::after {
     left: 20px;
+  }
+
+  .nav-logout-btn {
+    width: calc(100% - 40px);
+    margin: 1rem 20px 0.5rem 20px;
+    text-align: center;
   }
 }

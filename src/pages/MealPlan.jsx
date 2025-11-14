@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from "react";
 import "./MealPlan.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 const MealPlan = () => {
   const [mealPlan, setMealPlan] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [rawResponse, setRawResponse] = useState(""); // For debugging
+  const [generating, setGenerating] = useState(false);
 
   const navigate = useNavigate();
+  const { user, token, isAuthenticated, logout } = useAuth();
+
+  const API_URL = "https://backend-42kv.onrender.com/api";
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
 
   // Schedule button handler
   const handleScheduleClick = (meal) => {
@@ -17,54 +28,88 @@ const MealPlan = () => {
   };
 
   // Backend API call to generate a new meal plan
-  const generateMealPlan = async (prompt) => {
-    const user = JSON.parse(localStorage.getItem("userProfile"));
-    if (!user?.email) throw new Error("User email not found");
-
-    const response = await fetch("https://backend-42kv.onrender.com/api/meal-plan", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, userId: user.email }),
-    });
-
-    const text = await response.text();
-    if (!response.ok) throw new Error(text || "Server error");
-
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (err) {
-      throw new Error("Invalid JSON returned from server");
+  const generateMealPlan = async () => {
+    if (!user?.profile) {
+      setError("⚠️ Please complete your profile first.");
+      navigate("/profile-setup");
+      return;
     }
 
-    // Save locally per user
-    
-    setRawResponse(text); // optional debugging
+    setGenerating(true);
+    setError("");
 
-    return data;
+    const prompt = `
+Respond ONLY with valid minified JSON. NO explanations, NO markdown, NO code block, NO title, ONLY pure JSON. Example:
+{"meals":[{"name":"...","ingredients":[],...}]}
+
+Create a ${user.profile.diet} meal plan for someone trying to ${user.profile.fitnessGoal}. 
+Target calories: ${user.profile.calories} per day. Meals per day: ${user.profile.mealsPerDay}.
+Each meal should include:
+- name
+- ingredients (array of strings)
+- calories (number)
+- protein (number in grams)
+- carbs (number in grams)
+- fats (number in grams)
+
+Return in format:
+{"meals":[{"name":"...","ingredients":["..."],"calories":0,"protein":0,"carbs":0,"fats":0}, ... ]}
+    `;
+
+    try {
+      const response = await fetch(`${API_URL}/meal-plan`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ prompt }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to generate meal plan");
+      }
+
+      const data = await response.json();
+      setMealPlan(data.meals || []);
+    } catch (err) {
+      console.error("Generate meal plan error:", err);
+      setError(`❌ ${err.message}`);
+    } finally {
+      setGenerating(false);
+    }
   };
 
   // Load meal plan on mount
   useEffect(() => {
     const loadMealPlan = async () => {
-      setLoading(true);
-      setError("");
-      setMealPlan([]);
-      setRawResponse("");
-
-      const userProfile = localStorage.getItem("userProfile");
-      if (!userProfile) {
-        setError("⚠️ No user profile found. Please fill out your profile first.");
-        setLoading(false);
+      if (!isAuthenticated || !token) {
         return;
       }
 
-      const user = JSON.parse(userProfile);
+      setLoading(true);
+      setError("");
+      setMealPlan([]);
+
+      if (!user?.profile?.diet) {
+        setError("⚠️ Please complete your profile first.");
+        setLoading(false);
+        navigate("/profile-setup");
+        return;
+      }
 
       try {
-        // 1️⃣ Fetch past meal plans from backend
-        const res = await fetch(`https://backend-42kv.onrender.com/api/meal-plan/${user.email}`);
-        if (!res.ok) throw new Error("Failed to fetch past meal plans");
+        // Fetch past meal plans from backend
+        const res = await fetch(`${API_URL}/meal-plan`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch past meal plans");
+        }
 
         const data = await res.json();
 
@@ -72,28 +117,11 @@ const MealPlan = () => {
           // Use most recent saved plan
           setMealPlan(data[0].meals || []);
         } else {
-          // 2️⃣ If no saved plan, generate a new one
-          const prompt = `
-Respond ONLY with valid minified JSON. NO explanations, NO markdown, NO code block, NO title, ONLY pure JSON. Example:
-{"meals":[{"name":"...","ingredients":[],...}]}
-
-Create a ${user.diet} meal plan for someone trying to ${user.fitnessGoal}. 
-Target calories: ${user.calories} per day. Meals per day: ${user.mealsPerDay}.
-Each meal should include:
-- name
-- ingredients
-- calories
-- protein, carbs, fats
-
-Return in format:
-{"meals":[{"name":"...","ingredients":["..."],"calories":0,"protein":0,"carbs":0,"fats":0}, ... ]}
-          `;
-
-          const result = await generateMealPlan(prompt);
-          setMealPlan(result.meals || []);
+          // No saved plan, automatically generate one
+          await generateMealPlan();
         }
       } catch (err) {
-        console.error(err);
+        console.error("Load meal plan error:", err);
         setError(`❌ ${err.message}`);
       } finally {
         setLoading(false);
@@ -101,19 +129,42 @@ Return in format:
     };
 
     loadMealPlan();
-  }, []);
+  }, [isAuthenticated, token, user]);
 
-  const user = JSON.parse(localStorage.getItem("userProfile"));
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const handleEditProfile = () => {
+    navigate("/profile-setup");
+  };
 
   return (
     <div className="mealplan-root">
-      <h2 className="mealplan-title">🥗 Your AI-Generated Meal Plan</h2>
-      {user && <h4>Logged in as: {user.email}</h4>}
+      <div className="mealplan-header">
+        <div>
+          <h2 className="mealplan-title">🥗 Your AI-Generated Meal Plan</h2>
+          {user && <h4>Logged in as: {user.email}</h4>}
+        </div>
+        <div className="mealplan-actions">
+          <button onClick={handleEditProfile} className="mealplan-edit-btn">
+            ⚙️ Edit Profile
+          </button>
+          <button onClick={generateMealPlan} className="mealplan-regenerate-btn" disabled={generating}>
+            {generating ? "🔄 Generating..." : "🔄 Generate New Plan"}
+          </button>
+          <button onClick={handleLogout} className="mealplan-logout-btn">
+            🚪 Logout
+          </button>
+        </div>
+      </div>
 
-      {loading && <p className="mealplan-loading">Loading your meal plan...</p>}
+      {loading && <p className="mealplan-loading">⏳ Loading your meal plan...</p>}
+      {generating && <p className="mealplan-loading">🤖 AI is creating your personalized meal plan...</p>}
       {error && <p className="mealplan-error">{error}</p>}
 
-      {mealPlan && mealPlan.length > 0 && (
+      {!loading && !generating && mealPlan && mealPlan.length > 0 && (
         <div className="mealplan-list">
           {mealPlan.map((meal, index) => (
             <div key={index} className="mealplan-card">
@@ -129,7 +180,7 @@ Return in format:
               <div className="mealplan-ingredients">
                 <strong>Ingredients:</strong>
                 <ul>
-                  {meal.ingredients.map((ing, i) => (
+                  {meal.ingredients && meal.ingredients.map((ing, i) => (
                     <li key={i}>{ing}</li>
                   ))}
                 </ul>
@@ -142,6 +193,12 @@ Return in format:
               </button>
             </div>
           ))}
+        </div>
+      )}
+
+      {!loading && !generating && mealPlan.length === 0 && !error && (
+        <div className="mealplan-empty">
+          <p>No meal plans yet. Click "Generate New Plan" to create one!</p>
         </div>
       )}
     </div>
