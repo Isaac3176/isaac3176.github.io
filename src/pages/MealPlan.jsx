@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./MealPlan.css";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 
 const MealPlan = () => {
   const [mealPlan, setMealPlan] = useState([]);
