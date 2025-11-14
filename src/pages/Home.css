@@ -1,5 +1,5 @@
+/* Root */
 .home-root {
-  /* padding-top: 60px; */  /* Remove or comment out this line */
   padding-left: 24px;
   padding-right: 24px;
   min-height: 100vh;
@@ -8,6 +8,7 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
+/* Header */
 .home-header {
   text-align: center;
   margin-bottom: 40px;
@@ -28,9 +29,7 @@
   color: #cbd5e1;
 }
 
-/* Grid styles */
-/* ...existing code... */
-
+/* Grid */
 .grid-container {
   display: grid;
   grid-template-columns: 1fr;
@@ -56,7 +55,7 @@
   background: #23232a;
   box-shadow: 0 2px 12px rgba(0,0,0,0.18);
   border: 1px solid #27272a;
-  min-height: 320px; /* Bigger card */
+  min-height: 320px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -64,14 +63,12 @@
 
 .grid-item img {
   width: 100%;
-  height: 200px;           /* Bigger image */
+  height: 200px;
   object-fit: cover;
   border-radius: 18px 18px 0 0;
   display: block;
   transition: transform 0.25s;
 }
-
-/* ...rest of your styles remain the same... */
 
 .grid-item .overlay {
   position: relative;
@@ -104,11 +101,13 @@
   pointer-events: none;
 }
 
-/* ...existing code... */
+/* CTA buttons container */
 .home-cta-container {
   display: flex;
   justify-content: center;
+  gap: 16px; /* Space between buttons */
   margin: 48px 0 24px 0;
+  flex-wrap: wrap;
 }
 
 .cta-button {
@@ -129,6 +128,17 @@
   background: linear-gradient(90deg, #1e40af 60%, #60a5fa 100%);
   box-shadow: 0 4px 16px rgba(37,99,235,0.18);
 }
+
+/* Optional: differentiate login button */
+.login-button {
+  background: linear-gradient(90deg, #22c55e 60%, #4ade80 100%);
+}
+
+.login-button:hover {
+  background: linear-gradient(90deg, #16a34a 60%, #4ade80 100%);
+}
+
+/* Banner */
 .cta-banner {
   background: linear-gradient(90deg, #2563eb 60%, #60a5fa 100%);
   color: #fff;
@@ -141,25 +151,32 @@
   font-size: 1.15rem;
   box-shadow: 0 2px 8px rgba(37,99,235,0.10);
 }
-/* Footer */
+
+/* Tagline */
 .home-tagline {
   font-size: 1.3rem;
   color: #93c5fd;
   margin-bottom: 1.5rem;
   font-weight: 500;
+  text-align: center;
 }
+
 .home-tagline span {
   color: #22c55e;
 }
+
+/* Demo preview */
 .demo-preview {
   margin: 40px auto 0 auto;
   max-width: 400px;
   text-align: center;
 }
+
 .demo-preview h3 {
   color: #60a5fa;
   margin-bottom: 10px;
 }
+
 .demo-card {
   background: #23232a;
   color: #f3f4f6;
@@ -169,7 +186,10 @@
   font-size: 1.05rem;
   margin-bottom: 10px;
 }
-.footer {
+
+/* Footer */
+.footer,
+.home-footer p {
   margin-top: 60px;
   text-align: center;
   font-size: 0.9rem;
