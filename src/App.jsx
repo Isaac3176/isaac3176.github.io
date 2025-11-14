@@ -2,7 +2,6 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./AuthContext";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProfileSetup from "./pages/ProfileSetup";
@@ -12,21 +11,16 @@ import MealSchedulePage from "./pages/MealSchedulePage";
 import TrackMacrosPage from "./pages/TrackMacrosPage";
 import "./App.css";
 
+// --------------------
 // Protected Route Component
+// Checks authentication AND profile completeness
+// --------------------
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading, user } = useAuth();
 
   if (loading) {
     return (
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        fontSize: "20px",
-        color: "#93c5fd",
-        background: "#18181b"
-      }}>
+      <div style={loadingStyle}>
         Loading...
       </div>
     );
@@ -36,7 +30,7 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // Check if profile is complete (for routes that need it)
+  // Redirect to profile setup if profile incomplete
   if (!user?.profile?.diet || !user?.profile?.fitnessGoal) {
     return <Navigate to="/profile-setup" replace />;
   }
@@ -44,21 +38,38 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// Auth Route - redirects to meal-plan if already logged in
+// --------------------
+// Protected route without profile check
+// Only checks authentication
+// --------------------
+const ProtectedRouteWithoutProfileCheck = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div style={loadingStyle}>
+        Loading...
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
+// --------------------
+// Auth Route
+// Redirects logged-in users to /meal-plan
+// --------------------
 const AuthRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
     return (
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        fontSize: "20px",
-        color: "#93c5fd",
-        background: "#18181b"
-      }}>
+      <div style={loadingStyle}>
         Loading...
       </div>
     );
@@ -71,73 +82,89 @@ const AuthRoute = ({ children }) => {
   return children;
 };
 
+// --------------------
+// Shared Loading Style
+// --------------------
+const loadingStyle = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
+  fontSize: "20px",
+  color: "#93c5fd",
+  background: "#18181b",
+};
+
+// --------------------
+// App Content
+// --------------------
 const AppContent = () => {
   const { isAuthenticated } = useAuth();
 
   return (
     <div className="app-container">
-      {/* Only show Navbar when authenticated */}
+      {/* Show Navbar only if authenticated */}
       {isAuthenticated && <Navbar />}
-      
+
       <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-        
-        {/* Auth Routes - redirect to meal-plan if logged in */}
-        <Route 
-          path="/login" 
+        {/* Default route: redirect based on authentication */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
+        {/* Auth Routes */}
+        <Route
+          path="/login"
           element={
             <AuthRoute>
               <Login />
             </AuthRoute>
-          } 
+          }
         />
-        <Route 
-          path="/register" 
+        <Route
+          path="/register"
           element={
             <AuthRoute>
               <Register />
             </AuthRoute>
-          } 
+          }
         />
 
-        {/* Profile Setup - needs authentication but not complete profile */}
-        <Route 
-          path="/profile-setup" 
+        {/* Profile setup */}
+        <Route
+          path="/profile-setup"
           element={
             <ProtectedRouteWithoutProfileCheck>
               <ProfileSetup />
             </ProtectedRouteWithoutProfileCheck>
-          } 
+          }
         />
-        
-        {/* Protected routes - require authentication AND complete profile */}
-        <Route 
-          path="/meal-plan" 
+
+        {/* Protected routes (require auth + complete profile) */}
+        <Route
+          path="/meal-plan"
           element={
             <ProtectedRoute>
               <MealPlan />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/meal-schedule" 
+        <Route
+          path="/meal-schedule"
           element={
             <ProtectedRoute>
               <MealSchedulePage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/track-macros" 
+        <Route
+          path="/track-macros"
           element={
             <ProtectedRoute>
               <TrackMacrosPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/grocery-sync" 
+        <Route
+          path="/grocery-sync"
           element={
             <ProtectedRoute>
               <GrocerySync />
@@ -145,40 +172,16 @@ const AppContent = () => {
           }
         />
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Catch-all: redirect to /login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </div>
   );
 };
 
-// Protected route that only checks authentication, not profile completion
-const ProtectedRouteWithoutProfileCheck = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        fontSize: "20px",
-        color: "#93c5fd",
-        background: "#18181b"
-      }}>
-        Loading...
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return children;
-};
-
+// --------------------
+// Main App
+// --------------------
 const App = () => (
   <AuthProvider>
     <AppContent />
