@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -20,14 +19,19 @@ export const AuthProvider = ({ children }) => {
 
   // Load user from localStorage on mount
   useEffect(() => {
-    const savedToken = localStorage.getItem("authToken");
-    const savedUser = localStorage.getItem("userProfile");
+    try {
+      const savedToken = localStorage.getItem("authToken");
+      const savedUser = localStorage.getItem("userProfile");
 
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+      if (savedToken && savedUser) {
+        setToken(savedToken);
+        setUser(JSON.parse(savedUser));
+      }
+    } catch (error) {
+      console.error("Error loading auth from localStorage:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   // Register new user
