@@ -33,7 +33,7 @@ const MealSchedulePage = () => {
       setSelectedMeal(JSON.parse(meal));
       localStorage.removeItem("selectedMealToSchedule");
     }
-  }, [scheduleKey, user]);
+  }, []); // ✅ Fixed: Empty dependency array - only run once on mount
 
   // Assign a meal to a day/time
   const handleAssign = (day, time) => {
