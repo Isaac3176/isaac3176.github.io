@@ -1,59 +1,47 @@
-🥗 FitPlate – AI-Powered Personal Meal Planner
-FitPlate is a personal project built with ❤️ to help people like me eat better, stay healthy, and reach their fitness goals without stress or guesswork. This app utilizes AI to generate personalized meal plans tailored to your goals, dietary preferences, and daily calorie requirements.
+🥗 FitPlate
 
-This project matters deeply to me — I built FitPlate not just to learn full-stack development, but because I've personally struggled to balance healthy eating with a busy lifestyle. I wanted a tool that helps real people stay on track, without needing to hire a dietitian or spend hours planning meals.
+FitPlate is a personal full-stack project I built to make meal planning easier and more practical for people with busy schedules. The app generates meal plans based on fitness goals, dietary preferences, and daily calorie needs, helping users stay consistent without spending hours planning meals.
+
+I started this project to improve my full-stack development skills, but it quickly became personal. I’ve always found it hard to balance healthy eating with a busy routine, and I wanted to build something I’d actually use. FitPlate focuses on simplicity, clarity, and usability rather than over-complicating nutrition.
+
+Technically, FitPlate is built with a React frontend and a Node/Express backend. User profiles and preferences are stored in DynamoDB, and meal plans are generated using the OpenAI API. The backend is designed to keep API keys secure while returning structured data that the frontend can easily display.
+
+This project helped me get more comfortable designing end-to-end systems, thinking about user experience, and building software that solves a real problem.
+
+If you want, I can:
+
+Shorten this further
+
+Add a Tech Stack or Architecture section below it
+
+Make it more resume-friendly or more casual
+
+Polish it to match top GitHub project READMEs
+
+Just tell me 👍
+
+add the tech stack 
+
+Here’s a clean README intro with a simple Tech Stack section added, written to feel natural and not overproduced. You can paste this directly into your GitHub README.
+
+🥗 FitPlate
+
+FitPlate is a personal full-stack project I built to make meal planning easier and more practical for people with busy schedules. The app generates meal plans based on fitness goals, dietary preferences, and daily calorie needs, helping users stay consistent without spending hours planning meals.
+
+I started this project to improve my full-stack development skills, but it quickly became personal. I’ve always found it hard to balance healthy eating with a busy routine, and I wanted to build something I’d actually use. FitPlate focuses on simplicity, clarity, and usability rather than over-complicating nutrition.
+
+Technically, FitPlate is built with a React frontend and a Node/Express backend. User profiles and preferences are stored in DynamoDB, and meal plans are generated using the OpenAI API. The backend is designed to keep API keys secure while returning structured data that the frontend can easily display.
+
+This project helped me get more comfortable designing end-to-end systems, thinking about user experience, and building software that solves a real problem.
 
 🔧 Tech Stack
-Frontend: React (Vite) + Tailwind CSS
 
-Backend: Node.js + Express
+Frontend: React (Vite), Tailwind CSS
 
-AI: OpenAI GPT (chat-completions endpoint)
+Backend: Node.js, Express
 
-Hosting:
+Database: AWS DynamoDB
 
-Frontend: GitHub Pages
+AI: OpenAI API
 
-Backend: Render
-
-💡 Features
-🔥 Personalized meal plans powered by GPT-4
-
-🥦 Diet-based customization (e.g. vegan, keto, balanced)
-
-🎯 Fitness goal support (lose weight, gain muscle, maintain)
-
-🍱 Macro tracking (calories, protein, carbs, fats)
-
-🧠 Smart prompt design for clean JSON responses
-
-⚙️ Secure backend to hide and protect API keys
-
-🚀 How It Works
-User Profile: Enter your dietary preferences, calorie goals, and number of meals.
-
-AI Prompting: The frontend sends a custom prompt to the backend.
-
-Secure Request: The backend securely sends the prompt to OpenAI's API.
-
-AI Response: GPT-4 responds with a fully structured JSON meal plan.
-
-Display: The frontend parses and displays your personalized plan in a beautiful way.
-🙌 Why This Matters to Me
-FitPlate isn’t just another coding project. It’s personal.
-
-I created this app because I know what it feels like to want to live healthier but feel overwhelmed. Whether you’re trying to bulk up, slim down, or just make smarter choices, FitPlate is for anyone who wants a simple, smart, and supportive way to eat better. No stress, no confusion — just clarity.
-
-📦 Future Features
-📝 User profile saving
-
-📊 Weekly macro reports
-
-🛒 Smart grocery lists
-
-📆 Meal scheduling
-
-🧠 AI learning from feedback
-
-📬 Feedback & Contact
-I’m always open to ideas, feedback, and improvements. If you found this project helpful or inspiring, feel free to reach out or star the repo!
+Hosting: GitHub Pages (frontend), Render (backend)
